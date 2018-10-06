@@ -124,13 +124,3 @@ def resynthesize(spectrogram, window=1024, step=None, n=None):
     signal = signal.astype(np.int16)
     return signal
 
-
-
-def total_power(spectrogram):
-    return np.power(np.abs(spectrogram), 2).sum()
-
-
-def normalize_total_power(spectrogram, total):
-    unit_power = spectrogram / np.sqrt(total_power(spectrogram))
-    return unit_power * np.sqrt(total)
-
