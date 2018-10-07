@@ -44,14 +44,16 @@ def stft(signal, window=1024, step=None, n=None):
     0th dimension is time (window steps) and the 1th dimension is
     frequency.
     """
+    length = signal.size
     if step is None:
         step = window / 2
     if n is None:
         n = window
     if signal.ndim != 1:
         raise ValueError("signal must be a 1-dimensional array")
-    length = signal.size
+    
     num_windows = _num_windows(length, window, step)
+    print num_windows
     out = np.zeros((num_windows, n), dtype=np.complex64)
     taper = hamming(window)
     for (i, s) in enumerate(window_slice_iterator(length, window, step)):

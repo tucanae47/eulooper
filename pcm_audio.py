@@ -12,24 +12,24 @@ class AudioMan:
     def __init__(self):
         self.p = pyaudio.PyAudio()
 
+
+
     def play_audio(self,path):
-        def callback(in_data, frame_count, time_info, status):
-            data = wf.readframes(frame_count)
-            return (data, pyaudio.paContinue)
 
         wf = wave.open(path, 'rb')
-        stream = self.p.open(format=self.p.get_format_from_width(wf.getsampwidth()),
-                        channels=wf.getnchannels(),
-                        rate=wf.getframerate(),
-                        output=True,
-                        stream_callback=callback)
-        stream.start_stream()
-        while stream.is_active():
-            time.sleep(0.1)
+        stream = p.open(format=self.p.get_format_from_width(wf.getsampwidth()),
+                channels=wf.getnchannels(),
+                rate=wf.getframerate(),
+                output=True)
+
+        data = wf.readframes(CHUNK)
+        # play stream (3)
+        while len(data) > 0:
+            stream.write(data)
+            data = wf.readframes(CHUNK)
 
         stream.stop_stream()
         stream.close()
-        wf.close()
         self.p.terminate()
 
 

@@ -8,24 +8,24 @@ WAVE_OUTPUT_FILENAME = "output.wav"
 
 
 
-window = 1024
-step = window / 4
-
 
 def audio_mag(path):
     (nyq,signal) = read_wav(path)
     print(signal)
-    sp = stft(signal)
+    length = signal.size
+    window = int(np.log2(length)) 
+    step = window / 2
+    sp = stft(signal,window)
     print "constructing Laplacian pyramid"
     pyr = stft_laplacian_pyramid(sp)
     print "amplifying components of Laplacian pyramid"
-    passband = [0.5, 1.0]
-    fs = 44100 / step
-    gain = 10.0
+    passband = [0.6, 1.0]
+    fs = length / step
+    gain = 3.0
     amplified_pyr = amplify_pyramid(pyr, passband=passband, fs=fs, gain=gain)
     print "resynthesizing spectrogram from amplified Laplacian pyramid"
-    pyramid_resynth = resynthesize(amplified_pyr.sum(axis=-1))
-    path_out = path + "_aug.wav"
+    pyramid_resynth = resynthesize(amplified_pyr.sum(axis=-1),window)
+    path_out = "out" + path
     wavfile.write(path_out, int(2 * nyq), pyramid_resynth)
     return path_out
 
@@ -33,10 +33,8 @@ def audio_mag(path):
 
 def main():
     path = "hi.wav"
-    audio = AudioMan()
-    audio.record_audio(path)
+    #audio = AudioMan()
     path_out = audio_mag(path)
-    audio.play_audio(path_out)
 
 if __name__ == "__main__":
     main()
