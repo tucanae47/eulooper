@@ -3,7 +3,7 @@ from scipy.io import wavfile
 import scipy.signal as sig 
 from scipy.signal import firwin, filtfilt, hamming
 from pcm_audio import AudioMan
-from euler_utils import read_wav, stft,normalize_total_power,resynthesize, amplify_pyramid,stft_laplacian_pyramid 
+from euler_utils import read_wav, stft, resynthesize, amplify_pyramid,stft_laplacian_pyramid 
 WAVE_OUTPUT_FILENAME = "output.wav"
 
 
@@ -14,6 +14,7 @@ step = window / 4
 
 def audio_mag(path):
     (nyq,signal) = read_wav(path)
+    print(signal)
     sp = stft(signal)
     print "constructing Laplacian pyramid"
     pyr = stft_laplacian_pyramid(sp)
@@ -37,3 +38,5 @@ def main():
     path_out = audio_mag(path)
     audio.play_audio(path_out)
 
+if __name__ == "__main__":
+    main()

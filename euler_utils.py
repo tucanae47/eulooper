@@ -12,7 +12,8 @@ def read_wav(path):
     (fs, signal) = wavfile.read(path)
     nyq = fs / 2.0
     # For expediency, just pull one channel
-    signal = signal[start:end]
+    if signal.ndim > 1:
+        signal = signal[:, 0]
     return (nyq, signal)
 
 
